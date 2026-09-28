@@ -9,19 +9,19 @@ GROUP MEMBERS: Hashim, Shriya, Yumna, G, Guillermo
 
 
 First Question:
-How do daily steps, active minutes, and sleep relate to each other? Are the patterns different on weekends compared to weekdays?
+**How do daily steps, active minutes, and sleep relate to each other? Are the patterns different on weekends compared to weekdays?**
 
 
 
 Second Question:
 
-How does measured physical activity vary by age, sex, and BMI?
+**How does measured physical activity vary by age, sex, and BMI?**
 
 
 
 Third Question:
 
-Does self-reported activity match data collected from wearable fitness trackers/devices?
+**Does self-reported activity match data collected from wearable fitness trackers/devices?**
 
 
 
