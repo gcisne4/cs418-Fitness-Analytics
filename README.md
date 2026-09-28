@@ -25,6 +25,13 @@ Third Question:
 
 
 
+Fourth Question:
+
+**How do income and education relate to daily physical activity and sedentary time?** 
+
+
+
+
 Primary Datasets:
 Fitbit Fitness Tracker Data: https://www.kaggle.com/datasets/arashnic/fitbit
 
