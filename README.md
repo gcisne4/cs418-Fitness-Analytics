@@ -155,3 +155,15 @@ The full data for the 2011 BRFSS file is over 1GB unzipped, so it will not be in
 
 Unzip it into data/cdc/ and run the notebook. In the REPO, we include a 1000 row sample found in samples/brfss\_2011\_sample.csv
 
+
+**Exploratory analysis**
+
+Details are in EDA.md and eda.ipynb.
+
+**Data:** Our primary dataset is the Fitbit daily activity data (940 rows, 15 columns, one row per participant per day). NHANES is our secondary dataset and hasn't been explored yet.
+
+**Research questions:** How are daily steps and active minutes related, and why does it flatten at high step counts? Do people walk differently on weekdays and weekends, or does it depend more on the person? How does NHANES measure movement, and can we compare it to the Fitbit data?
+
+**Anomalies:** 72 days look like the tracker wasn't worn (zero steps and 1,440 sedentary minutes), including 4 with zero calories. We flagged them and plan to drop them. Another 7 days have 1,440 sedentary minutes but also steps, so we're still deciding. We also converted the date column from text to a date. We found no duplicates, negatives, or nulls.
+
+**Findings:** Steps and active minutes rise together but flatten above roughly 8,000 to 10,000 steps. Weekday (7,650) and weekend (7,607) averages are almost the same, but individuals vary a lot.
