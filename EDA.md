@@ -1,6 +1,6 @@
 **Exploratory Data Analysis**
 
-This summarizes eda.ipynb. It covers the Fitbit daily activity data, our primary dataset. We haven't profiled NHANES in the notebook yet.
+This summarizes eda.ipynb.
 
 **1. Dataset profile**
 
@@ -39,8 +39,6 @@ These use all 940 rows. Daily steps are mostly between 2,500 and 15,000 with a m
 Steps vs. total active minutes: active minutes rise with steps, but flatten out above roughly 8,000 to 10,000 steps, and the points spread out a lot. This was expected at low step counts but not the flattening, so one correlation number won't describe it well. Next we want to try very active minutes alone and check whether the flattening happens within a person or only between people.
 
 Weekday vs. weekend steps per participant: across 32 participants the averages were almost the same (7,650 on weekdays, 7,607 on weekends), and 15 of 32 walked more on weekends. People who walk a lot on weekdays also walk a lot on weekends, but individual differences were big (about -7,435 to +5,146 steps). So the person matters more than the day. Next we want to split Saturday and Sunday and look at the people far from the diagonal. These averages still include the zero days, so they will likely change once those are removed.
-
-We only have two relationship plots so far and the assignment asks for three, so we still need one more.
 
 **5. Revised research questions**
 
