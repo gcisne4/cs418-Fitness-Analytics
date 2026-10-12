@@ -49,3 +49,53 @@ Question 2: do people walk differently on weekdays and weekends, or does it depe
 Question 3: how does NHANES measure movement, and can we compare it to the Fitbit data? Unchanged until we profile NHANES.
 
 We changed the first two because the steps plot isn't a straight line and the weekday and weekend averages were almost identical.
+
+**NHANES Exploratory Data Analysis**
+
+1. Dataset Profile
+
+The NHANES 2011–2012 Physical Activity Monitor Day dataset contains 61,168 rows and 15 columns. Each row represents one participant's monitoring data for a particular day. The dataset includes monitoring day (PAXDAYD), weekday (PAXDAYWD), valid monitoring minutes (PAXVMD), movement measurements (PAXMTSD), and valid wake wear minutes (PAXWWMD).
+
+Initial profiling showed no null values. However, further investigation identified suspicious extremely small numeric values that required vleaning.
+
+2. Anomalies
+
+Several numeric columns contained values of approximately 5.39e-79, which are extremely close to zero. These suspicious values appeared in 60,267 of the 61,168 records. Since zero is a valid value for these measurements, we treated the near-zero values as likely artifacts associated with reading the SAS dataset. We created a cleaned copy of the dataset and replaced positive numeric values smaller than 1e-70 with zero.
+
+After cleaning, no suspicious near-zero values remained. All 61,168 rows and 15 columns were retained. This approach assumes that these values represent zeros rather than meaningful measurements.
+
+3. Distributions
+
+We examined the distribution of daily valid monitoring minutes (PAXVMD)
+
+The histogram showed that most records contain approximately 1,440 valid monitoring minutes, equivalent to nearly 24 hours. However, some records contain considerably fewer valid minutes, producing a tail toward lower values. This pattern is consistent with the NHANES monitoring protocol, where the first and last monitoring days are partial days.
+
+These differences matter because shorter monitoring periods provide less opportunity to record movement.
+
+4. Relationships
+
+We compared average valid monitoring minutes across the nine monitoring days. Days 2-8 consistently averaged approximately 1,431-1,436 valid minutes. In contrast, day 1 averaged approximately 501 minutes, and day 9 averaged approximately 944 minutes.
+
+This confirms that monitoring duration varies considerably across days, particularly at the beginning and end of data collection.
+
+The result was expected based on the NHANES monitoring protocol.
+
+What next? Focus subsequent analyses on days 2-8 to reduce the influence of partial monitoring days.
+
+We also compared movement measurements using PAXMTSD, which represents the daily sum of MIMS triaxial movement values. To account for differences in valid monitoring duration, we divided PAXMTSD by PAXVMD.
+
+Weekdays averaged approximately 9.58 MIMS per valid minute, while weekends averaged approximately 8.83. This represents approximately 8.5% higher average movement per valid minute on weekdays.
+
+The result was noteworthy because the difference remained after adjusting for valid monitoring duration. However, these descriptive averages do not establish statistical significance.
+
+What next? Investigate whether the weekday-weekend difference remains consistent across individual participants.
+
+5. Revised Research Questions
+
+How does monitoring duration vary across the nine monitoring days, and how does this influence comparisons of daily movement?
+
+Do participants have different wake wear times on weekdays compared with weekends?
+
+Is average movement per valid monitoring minute higher on weekdays than weekends, and does this pattern remain consistent across individuals?
+
+Can NHANES MIMS movement measurements and Fitbit step counts reveal similar weekday-weekend movement patterns, despite measuring activity differently?
