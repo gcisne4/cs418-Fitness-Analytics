@@ -170,3 +170,34 @@ Details are in EDA.md and eda.ipynb.
 
 
 **NHANES:** We analyzed 61,168 daily activity records and cleaned suspicious near-zero values. Monitoring days 2-8 had nearly complete recordings, while days 1 and 9 were partial. Participants averaged 844.53 wake wear minutes on weekdays versus 788.02 on weekends. Average movement per valid minute was also higher on weekdays (9.58 MIMS) than on weekends (8.83 MIMS)
+
+**Data Documentation**
+
+DATASHEET.md - Datasets in and out with question details and ethics
+
+Fitbit daily activity
+
+source:
+https://doi.org/10.5281/zenodo.53894
+
+The first release uses CC By 4.0. Kaggle mirror lists CC), which therefore conflicts the origin release.
+
+License:
+https://creativecommons.org/licenses/by/4.0/
+
+NHANES Physical Activity Monitor - Day
+
+Source:
+https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/PAXDAY_G.htm
+
+NHANES dat are public use, NCHS requires stats usage
+
+Terms:
+https://www.cdc.gov/nchs/policy/data-user-agreement.html
+
+Support datasets:
+BRFSS were inspected during acquisition but not use in the curr EDA calculartion.
+
+Biggest limitation:
+Small sample size of volunteer on Fitbit... need to expand on.
+
