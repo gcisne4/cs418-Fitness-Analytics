@@ -205,12 +205,12 @@
 # The Fitabase dictionary is a later reference. A matching 2016 dictionary has not been verified.
 
 
-# 3.1 Fitbit Source Columns
+# 3.1 Fitbit Source Columns - 21 rows (combine fitbit source and derived columns into one table)
 
 
 # The file has no observed nulls in the saved pro
 
-# 3.2 NHANES Day Source Columns
+# 3.2 NHANES Day Source Columns Codebook, 21 rows (combine NHANES source and derived cols into one table as well)
 
 # Character fields are decoded from bytes to strings in the EDA.Monitoring-day and weekday codes are converted to integers in the summary and comparison tables.
 
@@ -246,6 +246,8 @@
 
 # Ordered Steps
 
+Obtaining files, reading em, inspecting, fixing, create vars, filtering data such as days, and calculating summaries.
+
 # Row Accounting
 
 
@@ -270,6 +272,29 @@
 # Access Records
 
 # orignials file for data are not recorded as as long for the kaggle data but the release identities despribe the intended versions on inputs. Make sure to record data for actual.
+
+# Fitbit daily activity
+# Source: https://doi.org/10.5281/zenodo.53894
+# Release: April to May 2016 export
+# Access record: Existing original file copied and verified October 25, 2026 and also original download date unknown
+# Format: CSV (ZIP archive)
+# License: CC BY 4.0 and the Kaggle mirror lists CC0
+
+# NHANES PAXDAY_G
+# Source: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/PAXDAY_G.htm
+# Release: NHANES 2011 to 2012
+# Downloaded: October 25, 2026
+# Format: SAS XPORT .xpt
+# Terms: Public domain , with NCHS statistical usage and confidant conditions
+
+# NHANES DEMO_G + supporting dataset
+
+# Source: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DEMO_G.htm
+# Release: NHANES 2011 to 2012 and  revised January 2015
+# Download date: Not recorded
+# Format: SAS .xpt
+# Terms: Public domain, with NCHS conditions
+
 
 # Findable
 
