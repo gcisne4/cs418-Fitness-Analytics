@@ -194,7 +194,7 @@
 
 # 3. Codebook
 
-# The tables cover the primary file columns profiled in the EDA and the columns created for analysis.
+The tables cover the primary file columns profiled in the EDA and the columns created for analysis.
 
 # Null means a missing value in a dataframe.
 
@@ -205,12 +205,61 @@
 # The Fitabase dictionary is a later reference. A matching 2016 dictionary has not been verified.
 
 
-# 3.1 Fitbit Source Columns - 21 rows (combine fitbit source and derived columns into one table)
+## 3.1 Fitbit Source Columns - 21 rows (combine fitbit source and derived columns into one table)
 
+| Column | Type | Units | Meaning | Values | Missing | Origin |
+|---|---|---|---|---|---|---|
+| Id | Int64 | None | Identifier used to group activity records belonging to the same fitbit user | Integer identifiers; range not documented | 0 nulls | data/fitbit/dailyActivity_merged.csv |
+| ActivityDate | Date (originally String) | Calendar date | Date Associated with a participant's daily activity record | 2016-04-12 to 2016-05-12 | 0 nulls | Original Fitbit CSV; converted from String to Date in eda.ipynb |
+| TotalSteps | Int64 | Steps | Total steps recorded for a participant on a given day | 0 to 36019 (observed) | 0 nulls | Original Fitbit CSV |
+| TotalDistance | Float64 | Kilometers | Total daily distance tracked | 0 to 28.03 (observed) | 0 nulls | Original Fitbit CSV |
+| TrackerDistance | Float64 | Kilometers | Daily distance recorded by the Fitbit tracker | 0 to 28.03 (observed) | 0 nulls | Original Fitbit CSV |
+| LoggedActivitiesDistance | Float64 | Kilometers | Distance associated with logged activities | 0 to 4.94 (observed) | 0 nulls | Original Fitbit CSV |
+| VeryActiveDistance | Float64 | Kilometers | Distance recorded during very active periods | 0 to 21.92 (observed) | 0 nulls | Original Fitbit CSV |
+| ModeratelyActiveDistance | Float64 | Kilometers | Distance recorded during moderately active periods | 0 to 6.48 (observed) | 0 nulls | Original Fitbit CSV |
+| LightActiveDistance | Float64 | Kilometers | Distance recorded during lightly active periods | 0 to 10.71 (observed) | 0 nulls | Original Fitbit CSV |
+| SedentaryActiveDistance | Float64 | Kilometers | Distance categorized as sedentary activity | 0 to 0.11 (observed) | 0 nulls | Original Fitbit CSV |
+| VeryActiveMinutes | Int64 | Minutes | Number of minutes classified as very active during the day | 0 to 210 (observed) | 0 nulls | Original Fitbit CSV |
+| FairlyActiveMinutes | Int64 | Minutes | Number of minutes classified as moderately active during the day | 0 to 143 (observed) | 0 nulls | Original Fitbit CSV |
+| LightlyActiveMinutes | Int64 | Minutes | Number of minutes classified as lightly active during the day | 0 to 518 (observed) | 0 nulls | Original Fitbit CSV |
+| SedentaryMinutes | Int64 | Minutes | Number of minutes classified as sedentary during the day | 0 to 1440 (observed) | 0 nulls | Original Fitbit CSV |
+| Calories | Int64 | Kilocalories (kcal) | Estimated calories burned during the day | 0 to 4900 (observed) | 0 nulls | Original Fitbit CSV |
+| ActiveMinutes | Int64 | Minutes | Sum of lightly, fairly, and very active minutes per day | 0 to 552 (observed) | 0 nulls | Derived in eda.ipynb from LightlyActiveMinutes + FairlyActiveMinutes + VeryActiveMinutes |
+| DayType | String | None (category) | Classifies each activity date as a weekday or weekend | Weekday, Weekend | 0 nulls | Derived from ActivityDate in eda.ipynb |
+| MeanSteps | Float64 | Steps per day | Average daily steps for each participant grouped by weekday or weekend | 832.65 to 16751.38 (observed) | 0 nulls | Derived in eda.ipynb by grouping Id and DayType and averaging TotalSteps |
+| Weekday | Float64 | Steps per day | Average daily weekday steps for each participant | 832.65 to 15792.61 (observed) | 0 nulls after filtering | Derived in eda.ipynb by pivoting MeanSteps on DayType |
+| Weekend | Float64 | Steps per day | Average daily weekend steps for each participant | 1156.13 to 16751.38 (observed) | 0 nulls after filtering | Derived in eda.ipynb by pivoting MeanSteps on DayType |
+| WeekendDifference | Float64 | Steps per day | Difference between average weekend and weekday steps for each participant | -7435.41 to 5145.86 (observed) | 0 nulls after filtering | Derived in eda.ipynb by subtracting Weekday from Weekend |
 
-# The file has no observed nulls in the saved pro
+Polars weekday numbers are Monday = 1 through Sunday = 7.The Fitbit code uses 6 and 7 for weekends.
 
-# 3.2 NHANES Day Source Columns Codebook, 21 rows (combine NHANES source and derived cols into one table as well)
+## 3.2 NHANES Day Source Columns Codebook, 21 rows (combine NHANES source and derived cols into one table as well)
+
+| Column | Type | Units | Meaning | Values | Missing | Origin |
+|---|---|---|---|---|---|---|
+| SEQN | Float64 | None | Respondent sequence number | Numeric participant identifier | 0 nulls | Original CDC PAXDAY_G.xpt |
+| PAXDAYD | String | Monitoring day | Day number of physical activity monitoring | 1 to 9 | 0 nulls | Original CDC file; decoded from binary in eda.ipynb |
+| PAXDAYWD | String | Day-of-week code | Day of the week for the monitoring record | 1=Sunday through 7=Saturday | 0 nulls | Original CDC file; decoded from binary in eda.ipynb |
+| PAXSSNDP | Float64 | Sample number | Starting sample number for the day's 80 Hz accelerometer recordings | 0 to 52718400 | 0 nulls | Original CDC PAXDAY_G.xpt |
+| PAXMSTD | String | Time (HH:MM:SS) | Time when monitoring began for the day | HH:MM:SS | 0 nulls | Original CDC file; decoded from binary in eda.ipynb |
+| PAXTMD | Float64 | Minutes | Total minutes of monitoring data recorded during the day | 4 to 1440 | 0 nulls | Original CDC PAXDAY_G.xpt |
+| PAXAISMD | Float64 | 80 Hz samples | Count of accelerometer measurements recorded in idle sleep mode | 0 to 6912000 (CDC range) | 0 reported missing | Original CDC PAXDAY_G.xpt |
+| PAXVMD | Float64 | Minutes | Number of valid monitoring minutes without quality-control flags | 0 to 1440 (CDC range) | 0 reported missing | Original CDC PAXDAY_G.xpt |
+| PAXMTSD | Float64 | MIMS units | Daily sum of triaxial movement measurements from valid minutes | 0 to 50683.232 (CDC range) | 0 reported missing; missing coded as . when all minute MIMS values unavailable | Original CDC PAXDAY_G.xpt |
+| PAXWWMD | Float64 | Minutes | Number of valid minutes classified as awake while wearing the monitor | 0 to 1437 (CDC range) | 0 reported missing | Original CDC PAXDAY_G.xpt |
+| PAXSWMD | Float64 | Minutes | Number of valid minutes classified as asleep while wearing the monitor | 0 to 1440 (CDC range) | 0 reported missing | Original CDC PAXDAY_G.xpt |
+| PAXNWMD | Float64 | Minutes | Number of valid minutes classified as not wearing the monitor | 0 to 1440 (CDC range) | 0 reported missing | Original CDC PAXDAY_G.xpt |
+| PAXUMD | Float64 | Minutes | Number of valid monitoring minutes with an undetermined wear status | 0 to 288 (CDC range) | 0 reported missing | Original CDC PAXDAY_G.xpt |
+| PAXLXSD | Float64 | Sum of lux measurements | Daily sum of ambient light measurements from valid minutes | 0 to 1967563.43 (CDC range) | 0 reported missing | Original CDC PAXDAY_G.xpt |
+| PAXQFD | Float64 | Quality-control flag count | Total number of data-quality flags recorded during the day | 0 to 2880 (CDC range) | 0 reported missing | Original CDC PAXDAY_G.xpt |
+| DayType | String | None (category) | Classifies NHANES monitoring records as weekday or weekend | Weekday, Weekend | 0 nulls | Derived in eda.ipynb from PAXDAYWD, using monitoring days 2 to 8 |
+| MeanValidMinutes | Float64 | Minutes | Average valid monitoring minutes grouped by monitoring day number | 501.14 to 1436.14 (observed) | 0 nulls in summary | Derived in eda.ipynb by grouping PAXDAYD and averaging PAXVMD |
+| MeanWearMinutes | Float64 | Minutes | Average awake-wear monitoring minutes by weekday or weekend | 788.02 to 844.53 (observed) | 0 nulls in summary | Derived in eda.ipynb by grouping DayType and averaging PAXWWMD |
+| MovementPerValidMinute | Float64 | MIMS/minute | Daily MIMS movement divided by total valid monitoring minutes | 0 to 49.01 (observed) | 4 nulls | Derived in eda.ipynb from PAXMTSD / PAXVMD when PAXVMD > 0 |
+| MeanDailyMIMS | Float64 | MIMS units | Average daily MIMS movement grouped by weekday or weekend | 12664.39 to 13745.25 (observed) | 0 nulls in summary | Derived in eda.ipynb by grouping DayType and averaging PAXMTSD |
+| MeanMIMSPerValidMinute | Float64 | MIMS/minute | Average movement per valid monitoring minute grouped by weekday or weekend | 8.83 to 9.58 (observed) | 0 nulls in summary | Derived in eda.ipynb by grouping DayType and averaging MovementPerValidMinute |
+
+NHANES weekday codes are Sunday = 1 through Saturday = 7. average daily records
 
 # Character fields are decoded from bytes to strings in the EDA.Monitoring-day and weekday codes are converted to integers in the summary and comparison tables.
 
@@ -221,12 +270,12 @@
 
 # 3.3 Fitbit Derived Columns
 
-# Polars weekday numbers are Monday = 1 through Sunday = 7.The Fitbit code uses 6 and 7 for weekends.
+Polars weekday numbers are Monday = 1 through Sunday = 7.The Fitbit code uses 6 and 7 for weekends.
 
 
 # 3.4 NHANES Derived Columns
 
-# NHANES weekday codes are Sunday = 1 through Saturday = 7. average daily records
+NHANES weekday codes are Sunday = 1 through Saturday = 7. average daily records
 
 # 3.5 Supporting Fields
 
