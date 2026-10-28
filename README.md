@@ -27,7 +27,8 @@ Third Question:
 
 Fourth Question:
 
-**How do income and education relate to daily physical activity and sedentary time?** 
+**How do income and education relate to daily physical activity and sedentary time?**
+
 
 
 
@@ -156,11 +157,12 @@ The full data for the 2011 BRFSS file is over 1GB unzipped, so it will not be in
 Unzip it into data/cdc/ and run the notebook. In the REPO, we include a 1000 row sample found in samples/brfss\_2011\_sample.csv
 
 
+
 **Exploratory analysis**
 
 Details are in EDA.md and eda.ipynb.
 
-**Data:** Our primary dataset is the Fitbit daily activity data (940 rows, 15 columns, one row per participant per day). NHANES is our secondary dataset and hasn't been explored yet.
+**Data:** Our primary dataset is the Fitbit daily activity data (940 rows, 15 columns, one row per participant per day). NHANES is our secondary dataset (61,168 rows, 15 columns, 6,917 participants, one row represents one participant's physical activity monitoring for one day. Each participant was recorded daily for 9 days).
 
 **Research questions:** How are daily steps and active minutes related, and why does it flatten at high step counts? Do people walk differently on weekdays and weekends, or does it depend more on the person? How does NHANES measure movement, and can we compare it to the Fitbit data?
 
@@ -169,11 +171,12 @@ Details are in EDA.md and eda.ipynb.
 **Findings:** Steps and active minutes rise together but flatten above roughly 8,000 to 10,000 steps. Weekday (7,650) and weekend (7,607) averages are almost the same, but individuals vary a lot.
 
 
+
 **NHANES:** We analyzed 61,168 daily activity records and cleaned suspicious near-zero values. Monitoring days 2-8 had nearly complete recordings, while days 1 and 9 were partial. Participants averaged 844.53 wake wear minutes on weekdays versus 788.02 on weekends. Average movement per valid minute was also higher on weekdays (9.58 MIMS) than on weekends (8.83 MIMS)
 
 **Data Documentation**
 
-DATASHEET.md - Datasets in and out with question details and ethics
+\[DATASHEET.md](DATASHEET.md) - Datasets in and out with question details and ethics
 
 Fitbit daily activity
 
@@ -188,7 +191,7 @@ https://creativecommons.org/licenses/by/4.0/
 NHANES Physical Activity Monitor - Day
 
 Source:
-https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/PAXDAY_G.htm
+https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/PAXDAY\_G.htm
 
 NHANES dat are public use, NCHS requires stats usage
 
@@ -199,5 +202,5 @@ Support datasets:
 BRFSS were inspected during acquisition but not use in the curr EDA calculartion.
 
 Biggest limitation:
-Small sample size of volunteer on Fitbit... need to expand on.
+Small sample size of volunteer on Fitbit, so it may not be representative of the general population of Fitbit users. Since the sample size is limited, we have limited demographic information, and potentially even incomplete tracker usage which would make the results harder to generalize. A limitation across the data (between Fitbit and NHANES) is that Fitbit measures steps while NHANES uses accelerometer-based MIMS measurements AND they involved different participants and collection periods, so they cannot be compared directly.
 
