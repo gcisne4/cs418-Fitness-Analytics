@@ -2,19 +2,17 @@
 
 # 1. Datasheets
 
-# Fitbit daily activity 
+# Fitbit daily activity and NHANES PAXDAY_G are our primary datasets. DEMO_G is a supporting dataset that was inspected during acquisition but not used in the current EDA we have. 
 
 # Motivation
 
 # [pargraph here]
-# The original dataset is credit by Robert Furberg, Julia Brinton, Michael Keating, and Alexa Oritz. The datasets describes personal tracker data regarding Fitbit by valid users through survery distributed by via Amazon Mechanical Turk.
-
-# Note, specific original research objective and funding source aren't doucmented in the dataset record via publisher.
+# The original dataset is credit by Robert Furberg, Julia Brinton, Michael Keating, and Alexa Oritz. The datasets describes personal tracker data regarding Fitbit by valid users through survery distributed by via Amazon Mechanical Turk. Also specific original research objective and funding source aren't doucmented in the dataset record via publisher.
 
 # Composition 
 
 # [pargraph here]
-#  The selected activity has 940 rows and 15 cols, from April 12 to May 12 of 2016. Row represents tracker IDs daily summary. Publisher reports about 30 users, while released show 33 IDs. The sample data has no additional data on location and more.
+#  The selected file (dailyActivity_merged.csv) activity has 940 rows and 15 cols, from April 12 to May 12 of 2016.Each Row is one tracker ID represents daily summary. Publisher reports about 30 users, while released show 33 IDs. The volunteer sample data has no additional data on location and more such as demographic, geographic. Something to note is zero values and incomplete days coverage can still reflecting recording problem.
 
 ![Fitbit daily steps distribution](figures/fitbit_daily_steps.png)
 
@@ -23,12 +21,12 @@
 # Collection Process
 
 # [pargraph here]
-# Validation eligible users personal data tracker record through Amazon Mechanical Turk submitted during March to May 2016. The publisher states the users consented and the tracker types and habits varied. Some data aren't documentated such as eligibility for survey etc.
+# Fitbit validation eligible users personal data tracker record through Amazon Mechanical Turk submitted during March to May 2016. The publisher states the users consented and the tracker types and habits varied. Some data aren't documentated such as eligibility for survey etc.
 
 # Preprocessing
 
 # [pargraph here]
-# File contains merge daily summaries but whole process is not document on the cleaning situation. The EDA converts dat and create active minute and also weekeday and wekeend variables. It flag 72 non wear daya and seven contraditiocry records. Still all data in tact together.
+# CSV File contains merge daily summaries but whole process is not document on the cleaning situation. The EDA converts date and create active minute and also weekeday and wekeend variables. It flag 72 non wear days with zero steps and 1440 sedentary minutes and seven contraditiocry records. Still all data in tact together.
 
 ![Fitbit sedentary minutes distribution](figures/fitbit_sedentary_minutes.png)
 
@@ -38,38 +36,35 @@
 # Uses
 
 # [pargraph here]
-# Data to explore steps, active minutes, and weekday, weekend patterns. The observations do not establish the casuality or a population global pattern and doesn't 100% correlation with the users particpants in the survery. 
+# Data to explore steps, active minutes, and weekday, weekend patterns. The observations do not establish the casuality or a population global pattern and doesn't 100% correlation with the users fitbit particpants in the survery.
 
 # Distribution
 
 # [pargraph here]
-# Zenodo as ZIP archive
+# Zenodo as ZIP archive under CC BY 4.0. The Kaggle mirror lists CC0, which therefore conflicts with the original release. We will follow the original attributions of origin release.
 
 # Maintenace
 
 # [pargraph here]
-# Hosts the origin release (May 31, 2016), any occuring updates aren't shown document of any sort it seems
+#Xenodo  Hosts the origin release (May 31, 2016), any occuring updates aren't shown document of any sort it seems on the record. Check DOI record for release changes.
 
 # Sources
 
-# https://doi.org/10.5281/zenodo.53894
-# https://zenodo.org/api/records/53894
-# https://www.kaggle.com/datasets/arashnic/fitbit
-# https://www.kaggle.com/api/v1/datasets/view/arashnic/fitbit
-
-# need to look into more here
-
-# same process for 1.2
+# Original Release: https://doi.org/10.5281/zenodo.53894
+# Registered DOI metadata: https://zenodo.org/api/records/53894
+# Kaggle mirror and listed uses: https://www.kaggle.com/datasets/arashnic/fitbit
+# License: https://www.kaggle.com/api/v1/datasets/view/arashnic/fitbit
+# eda.ipynb
 
 # 1.2 NHANES Physical Activity Monitor
 
 # Motivation
 
-# The dataset comes from CDC for health statistics. It measures movement using monitors to add information beyond what people report in surveys. 
+# The dataset comes from CDC National Center for health statistics. It collection data to measures movement using monitors to add information beyond what people report in surveys. Such as walking and sleeping hours movement and supplement self reported activity. 
 
 # Composition
 
-# The selected file has 61,168 rows and 15 cols, with 6,917 participants. A row represents person' monitoring day. Each person can have up to nine records. The public file includes people aged six and older.Some records are missing because people refused, didn't return the monitor, or had damaged devices with not good data.
+# The selected file has 61,168 rows and 15 cols, with 6,917 participants from NHANES 2011 to 2012.. A row represents one each person' monitoring day. Each person can have up to nine records. The public file includes people aged six and older.Some records are missing because people refused, didn't return the monitor, or had damaged devices with not good data.
 
 ![NHANES valid monitoring minutes distribution](figures/nhanes_valid_minutes.png)
 
@@ -83,11 +78,11 @@
 
 # Collection Process
 
-# The data was collected during the 2011 to 2012 survey. People wore an actigraph monitor on  wrist. included seven days, The device recorded acceleration 80 times per sec. NHANES provides consent procedure.
+# The data was collected during the 2011 to 2012 survey. People wore an actigraph GT3X+ monitor on  non dominant wrist. included seven days, The device recorded acceleration 80 times per sec. NHANES provides consent procedure. It was also partial on first and last days. Acceleration was recorded at 80 HZ. There are some gaps on refusals process with unreturned and damaged devices.
 
 # Preprocessing
 
-# Cdc  checked data quality and created daily summaries on movement.An algo classified wake, sleep, and more. the EDA changes positive numeric values below 70 to zero,assume their are issues from reading the file. 61,168 rows.Weekday/weekend comparisons use days 2 to 8 and calculate PAXMTSD / PAXVMD when valid minutes are above zero.
+# CDC  checked data quality and created daily summaries on movement in MIMS units. An algorithm classified wake, sleep, and non wear and unknown periods available in public minute, hour, and days summaries. We use day file with public access to the original 80 hz sensor files but it's not verified yet. the EDA changes positive numeric values below 1e-70 to zero as 0 < value < 1e-70 to zero ,assume their are issues from reading the file. 61,168 rows.Weekday/weekend comparisons use days 2 to 8 and calculate PAXMTSD / PAXVMD when valid minutes are above zero. There are four rows have a null.
 
 # Uses
 
@@ -95,28 +90,34 @@
 
 # Distribution
 
-# CDC shares the data as a .xpt file.
+# CDC shares the data as a .xpt file. CDC publishes PAXDAY_G as sas sport (.xpt) file with online codebook. Data are public domain with NCHS statistical use.
 
 # Maintenance
 
-# CHS hosts the release, first published in 11/2020.The data no revision up to any changes it seem.
+# CHS hosts the release, first published in 11/2020.The data no revision up to any changes it seem. Need to check files documentatge page for revisions when usage with data.
+
+# Sources for 1.2
+# Dataset and methods: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/PAXDAY_G.htm
+# Ethics and consent information: https://www.cdc.gov/nchs/nhanes/about/erb.html
+# Public Domain: https://wwwn.cdc.gov/nchs/NHANES/NhanesCitation.aspx
+
 
 
 # 1.3 Supporting Dataset: NHANES Demographics (DEMO_G)
 
 # Purpose
 
-# The file is cdc for Health Statistics. It provides demographic information, survey weights, and survey design fields. It could support future weighted or demographic analyses.
+# The file is cdc for Health Statistics. It provides demographic information, survey weights, and survey design fields. It could support future weighted or demographic analyses, NHANES analyses. 
 
 # Composition
 
-# The file is 9,756 rows and 48 cols. Each row represents one survey participant. Different fields have different age and eligibilee rules.
+# The file is 9,756 rows and 48 cols. Each row represents one survey participant. Field eligibility varies by age and topic. Missing values, refused answers, and inapplicable questions must be interpreted using codebook. Different fields have different age and eligibilee rules.
 
 
 
 # Collection and Preprocessing
 
-# interviewers collected demographic through household interviews. Some participants answered directly, while others had proxy respondents. CDC checked responses, skip patterns, and consistency. Some information left out restricted for confidentiality.
+# interviewers collected demographic through household interviews. Some participants answered directly, while others had proxy respondents. CDC checked responses, skip patterns, and consistency. Some information left out restricted for confidentiality. The household interview took place in 2011 to 2012 using questionnaires on the computer. Proxy respondents answer for children under 16 and people unable to answer for themselves. Collection followed the NHANES consent book.
 
 # Current Use
 
@@ -124,53 +125,53 @@
 
 # Distribution and Maintenance
 
-# CDC publishes the file in .xpt , release was first published in September 2013 and revised in January 2015.
+# CDC publishes the file in .xpt , release was first published in September 2013 and revised in January 2015. Under the public data conditions as seen in section 5
+
+# source for 1.3: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DEMO_G.htm
 
 
 # 2. Research Questions and Data Scope
 
-# The target population is who/ what we want to describe. The access frame is who could be reach for by the collection process. The sample is the data we want to actually analyze.
+# The target population is who/ what we want to describe. The access frame is who could be reach for by the collection process. The sample is the data we want to actually analyze. NHANEs comparisons are descriptive and unweighted. Comparisions within individual NHANES participants remain more to do.
 
 # These are the revised questions from EDA.md. The older questions about sleep, demographic differences, income, education, and self reported activity are not implement  in the current EDA.
 
-# Should add more here maybe, seem important
 
 # Q1. How are Fitbit steps and active minutes related?
 
 # Target: Fitbit activity day (April–May 2016)
 # Frame: Eligible users (Mechanical Turk survey) and who could and would share tracker records.
 # Sample: 940 daily records across 33 exported IDs.
-# Limit: This volunteer sample does not show all avaliable Fitbit users + activity. Could show correlation to flatten data.
+# Limit: This volunteer sample does not show all avaliable Fitbit users + activity. Could show correlation to flatten data. Nonparticipants and unrecorded ays are absent. Repeated days from same ID are related as duplicates. Plot doesn't show the flatten data still.
 
 # Q2. Do Fitbit weekday and weekend patterns differ by person?
 
 # Target: Within the user day to day weekday/weekend step patterns.
 # Frame: The same volunteered Fitbit records.
-# Sample: 32 IDs with both weekday and weekend observations.
-# Limit: Day coverage differs between IDs.
-# The summaries are details and great and still include suspected not wearing days records.
+# Sample: 32 IDs with both weekday and weekend observations using each id mean steps for each day type.
+# Limit: Day coverage differs between IDs.  One of the 33 IDs lacks both day types. Recorded day diff across IDs. These volunteers do not represent all fitbit users. The summaries are details and great and still include suspected not wearing days records.
 
 # Q3. How does NHANES measure movement, and can we compare Fitbit?
 
-# Target: Movement measurements in the two study setting.
-# Frame: The Fitbit release and public NHANES PAM release.
+# Target: Movement measurements in the two study setting. Meaning and comparability of activity measurements. 
+# Frame: The Fitbit release and public NHANES PAM released documentation. 
 # Sample: The two primary files and their measurement documentation.
-# Limit: The studies use different devices, periods, populations, and units and more. MIMS values cannot be directly treated as step counts.
+# Limit: The studies use different devices, periods, populations, and units and more. MIMS values cannot be directly treated as step counts. Complete whole processing details for Fitbit aren't available data right now. Does not validate conversion from MIMS to steps.
 
 # Q4. How does monitoring duration vary across nine days?
 
-# Target: Monitoring coverage among eligible NHANES participants.
-# Frame: Survey participants with public PAM records.
+# Target: Monitoring coverage among eligible NHANES participants in 2011 to 2012 with age six and older who were eligible for public pam release.
+# Frame: Survey participants with public PAM records. Survey household saampling process.
 # Sample: All 61,168 daily records from 6,917 participants.
-# Limit: Some eligible participants hass no monitor data.
+# Limit: Some eligible participants hass no monitor data. So they are absent and don't count.
 # Also very imporant here, The first and last days are partial,and not every participant has nine complete records.
 
 # Q5. Does wake-wear time differ on weekdays and weekends?
 
-# Target: Wake wear patterns among us
-# Frame: Eligible NHANES participants
-# Sample: 47,643 records from monitoring days 2–8.
-# Limit: These are unweighted daily record means.
+# Target: Awake Wake wear patterns among US people that are population age 6 and older in 2011 and 2012.
+# Frame: Eligible NHANES participants within household survey frame
+# Sample: 47,643 records from monitoring days 2–8. 6908 participants on those 2 to 8 days grouped by weekday or weekend.
+# Limit: These are unweighted daily record means. 
 # People with more recorded days have more influence.
 # Monitor nonresponse and missing coverage remain.
 
@@ -190,6 +191,11 @@
 # and NHANES day type summaries from days 2–8.
 # Limit: These are different samples and comparison methods.
 # Differences cannot be attributed to the device alone No people are matched between the datasets.
+
+# Sources for section 2:
+# Fitbit recruitment: https://doi.org/10.5281/zenodo.53894
+# NHANES eligibility: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/PAXDAY_G.htm
+# NHANES sampling and exclusions: https://wwwn.cdc.gov/nchs/nhanes/tutorials/SampleDesign.aspx
 
 
 # 3. Codebook
@@ -328,10 +334,12 @@ Obtaining files, reading em, inspecting, fixing, create vars, filtering data suc
 # Access record: Existing original file copied and verified October 25, 2026 and also original download date unknown
 # Format: CSV (ZIP archive)
 # License: CC BY 4.0 and the Kaggle mirror lists CC0
+# Version: April 12 to May 12, 2016 export. dailyActivity_merged.csv.  original release published May 31, 2016.
 
 # NHANES PAXDAY_G
 # Source: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/PAXDAY_G.htm
-# Release: NHANES 2011 to 2012
+# Data file: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/PAXDAY_G.XPT
+# Release: NHANES 2011 to 2012, first published november 2020, last change n/a.
 # Downloaded: October 25, 2026
 # Format: SAS XPORT .xpt
 # Terms: Public domain , with NCHS statistical usage and confidant conditions
@@ -339,19 +347,22 @@ Obtaining files, reading em, inspecting, fixing, create vars, filtering data suc
 # NHANES DEMO_G + supporting dataset
 
 # Source: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DEMO_G.htm
+# Data file: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DEMO_G.XPT
 # Release: NHANES 2011 to 2012 and  revised January 2015
-# Download date: Not recorded
-# Format: SAS .xpt
+# Download date: Not recorded, release version above identifies the file needed.
+# Format: SAS sport .xpt
 # Terms: Public domain, with NCHS conditions
+# Use: Inspected during acquisition but not use in our EDA results.
 
+# FAIR CHECKLIST 
 
 # Findable
 
-# original Fitbit release is DOI and CDC pages identify the NHANES cycle, files, + codebooks.
+# original Fitbit release is DOI and CDC pages identify the NHANES cycle, files, + codebooks original release
 
 # Accessible
 
-# Publisher files can be downloaded online. The repository provides notebooks + outputs.
+# Publisher files can be downloaded online. The repository provides notebooks + outputs. Raw data must be obtain separately and placed in the path used in the notebooks.
 
 # Interoperable
 
@@ -359,22 +370,27 @@ Obtaining files, reading em, inspecting, fixing, create vars, filtering data suc
 
 # Reusable
 
-# original Fitbit data follows conditions: credit the creators, link the source and license, and describe changes. Also The Kaggle CC0 label conflicts with the original release.
-
+# original Fitbit data follows conditions: credit the creators, link the source and license, and describe changes. Also The Kaggle CC0 label conflicts with the original release. We may reproduce our transformations and reuse the resulting data under the original source conditions. Credit the CC by 4.0 license and identify the changes. 
 # NHANES data are generally public domain.
-# NCHS conditions limititation use to statistical analysis and reporting.
+# NCHS conditions limititation use to statistical analysis and reporting. Need to cit NCHS and follow agreement if an identify is discover.
+
+# Fitbit license: https://creativecommons.org/licenses/by/4.0/
+# Original release metadata: https://api.datacite.org/dois/10.5281/zenodo.53894
+# Conflicting mirror license: https://www.kaggle.com/datasets/arashnic/fitbit
+# NHANES public-domain and citation guidance: https://wwwn.cdc.gov/nchs/NHANES/NhanesCitation.aspx
+# NCHS conditions: https://www.cdc.gov/nchs/policy/data-user-agreement.html
 
 # 6. People, Representation, and Potential Effects
 
 # Representation
 
-# Fitbit represents volunteers who owned a tracker,could share records, and took part in the recruitment process.People without a tracker (without access) aren't in coverage zone. Doesn't provide much on demographics
+# Fitbit represents volunteers who owned a tracker,could share records, and took part in the recruitment process. People without a tracker (without access) aren't in coverage zone. Doesn't provide much on demographics fields, we can't access representation by age, income, race or other groups etc.
 
-# NHANES has a probability design for samples, but the public PAM file only includes participants with monitor data. and active-duty military personnel.
+# NHANES has a probability design for samples, but the public PAM file only includes participants with monitor data. and active-duty military personnel. Our unweighted EDA does not recover the national representation intended by the full survey design.
 
 # Missing Coverage and Possible Bias
 
-# Monitor refusal, failed returns, damaged devices, and incomplete recording can change who appears in the data. The Fitbit non wear labels are uncertain.
+# Monitor refusal, failed returns, damaged devices, and incomplete recording can change who appears in the data. The Fitbit non wear labels are uncertain on NHANES as they are algorithm estimates. Low records movement shouldn't be use as person effort, health , etc.
 
 # Potential Uses and Harms
 
@@ -382,21 +398,29 @@ Obtaining files, reading em, inspecting, fixing, create vars, filtering data suc
 
 # CARE Principles
 
-# CARE was developed for Indigenous data gov . We use it as a lens for thoughts about  people and their responsibilities.
+# CARE was developed for Indigenous data gov . We use it as a lens for thoughts about  people and their responsibilities toward people represented in the data. 
 
 # Collective Benefit
 
-# The intends benefit is learning how activity measurements work and describing within the limitation happens.
+# The intends benefit is learning how activity measurements work and describing within the limitation happens. 
 
 # Authority to Control
 
-# Respect the documented consent framework.
+# Respect the documented consent framework and access conditions. Public availability doesn't give us the right to identifying people or for every new use. Must respect data use.
 
 # Responsibility
 
-# Keep source information and explain processing choices.Report missing coverage, avoid uncertainty and unfinished data.
+# Keep source information and explain processing choices.Report missing coverage, avoid uncertainty and unfinished data. Correct errors and etc.
 
 # Ethics
 
-# Consider these thoughts on how activity labels could misrepresent people. Avoid unsupported health, demographic and more and also explain limitations before others use the results for decisions on assumptions.
+# Consider these thoughts on how activity labels could misrepresent people. Avoid unsupported health, demographic and more and also explain limitations before others use the results for decisions on assumptions. Also consider how new uses could affect participants including people with disabilities or circumstances not represented in the available field.
+
+# Source for Section 6:
+
+# Fitbit recruitment and consent statement: https://doi.org/10.5281/zenodo.53894
+# NHANES sampling: https://wwwn.cdc.gov/nchs/nhanes/tutorials/SampleDesign.aspx
+# Monitor coverage and algorithm limits: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/PAXDAY_G.htm
+# NCHS conditions: https://www.cdc.gov/nchs/policy/data-user-agreement.html
+# CARE principles: https://doi.org/10.5334/dsj-2020-043
 
