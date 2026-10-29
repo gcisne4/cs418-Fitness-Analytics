@@ -290,37 +290,123 @@ NHANES weekday codes are Sunday = 1 through Saturday = 7. average daily records
 
 # 4. Recipe: Raw Files to Analysis Dataframes
 
-# Environment
+## Environment
 
-# The notebooks use Python, Polars, pandas, and matplotlib.
+Language used: Python
 
-# Raw Inputs
+Libraries used: Polars, pandas, and matplotlib
 
-# dailyActivity_merged.csv. and PAXDAY_G.xpt (NHANES 2011 to 2012 release)
+Package versions: Not Recorded
 
+## Raw Inputs
 
-# Ordered Steps
+### Fitbit
+- File: dailyActivity_merged.csv
+- Download source: https://doi.org/10.5281/zenodo.53894 
+- Expected folder: "data/fitbit/dailyActivity_merged.csv"
+- Starting rows: 940 
+- Starting columns: 15 
 
+### NHANES
+- File: PAXDAY_G.xpt (NHANES 2011 to 2012 release)
+- Download source: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/PAXDAY\_G.htm
+- Expected folder: "data/cdc/PAXDAY_G.xpt"
+- Starting rows: 61168 
+- Starting columns: 15 
+
+## Ordered Steps
 Obtaining files, reading em, inspecting, fixing, create vars, filtering data such as days, and calculating summaries.
 
-# Row Accounting
+### Fitbit
 
+1. Loading the data
+   - Code location: Cell 1
+   - What happens: Using polars, the data gets read into the variable fitbit_raw_data and displays the head cols+rows of the data.
+   - Initial Rows: 940
 
-# There are 47,639 non null movement ratios. The group mean skips the four null ratios. The 4 still contribute when needed.
+2. Fixing the date column
+   - Code location: 
+   - Original type: 
+   - New type: 
+   - Rows removed: 
 
-# Joins
+3. Checking unusual records
+   - Code location: 
+   - What was checked: 
+   - What was actually removed:
 
-# No joins in .eda
+4. Creating new columns
+   - Code location: 
+   - New columns:
+   - How they were calculated:
 
+5. Grouping the data
+   - Code location: 
+   - Grouping columns: 
+   - Final number of groups: 
 
-# Analysis Tables
+### NHANES
 
+1. Loading the data
+   - Code location: 
+   - File format: 
+   - Starting shape: 
 
-# These tables are made in memory with figures and summaries in notebooks(output)
+2. Fixing column types
+   - Code location:
+   - Columns changed: 
+   - What changed: 
 
-# Reproducibility Limits
+3. Cleaning unusual values
+   - Code location: 
+   - Condition used: 
+   - Action taken: 
+   - Rows removed: 
 
-# The notebooks require raw files. Download dates and exact package versions are not recorded.
+4. Filtering monitoring days
+   - Code location: 
+   - Days included: 
+   - Rows before: 
+   - Rows after:
+
+5. Creating analysis columns
+   - Code location: 
+   - New columns: 
+   - Calculations: 
+
+## Row Accounting
+
+| Dataset or stage | Before | After | Removed |
+|---|---:|---:|---:|
+| Fitbit loading | 940 | 940 | 0 |
+| Fitbit date conversion | 940 | 940 | 0 |
+| Fitbit adding new columns | 940 | 940 | 0 |
+| Fitbit paired comparison | 33 | 32 | 1 |
+| NHANES loading | 61168 | 61168 | 0 |
+| NHANES near-zero cleaning | 61168 | 61168 | 0 |
+| NHANES day filtering | 61168 | 47643 | 13525 |
+| NHANES movement ratio | 47643 | 47643 | 0 |
+
+Fitbit paired comparison: starts with 33 unique participant IDs, but only 32 have both weekday and weekend observations. One participant is excluded from the paired comparison.
+
+NHANES movement ratios: there are 47,639 non null movement ratios. The group mean skips the four null ratios. The 4 still contribute when needed.
+
+## Joins
+No joins in .eda
+
+## Analysis Tables
+These tables are made in memory with figures and summaries in notebooks(output)
+
+fitbit_data:	Fitbit records after transformations
+participant_steps:	Average steps grouped by participant and day type
+paired_steps:	Participants with both weekday and weekend averages
+nhanes_clean:	NHANES records after near-zero cleaning
+nhanes_day_summary: Average valid minutes by monitoring day
+nhanes_weekday_data:	NHANES records restricted to days 2–8
+nhanes_activity_data:	Records with the movement-per-valid-minute calculation
+
+## Reproducibility Limits
+The notebooks require raw files that are large so couldn't be uploaded. Download dates and exact package versions are not recorded.
 
 # 5. Access, Versioning, and Reuse
 
