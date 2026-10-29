@@ -325,56 +325,62 @@ Obtaining files, reading em, inspecting, fixing, create vars, filtering data suc
    - Initial Rows: 940
 
 2. Fixing the date column
-   - Code location: 
-   - Original type: 
-   - New type: 
-   - Rows removed: 
+   - Code location: cell [11]
+   - Original type: String
+   - New type: Date
+   - Rows removed: 0
 
 3. Checking unusual records
-   - Code location: 
-   - What was checked: 
-   - What was actually removed:
+   - Code location: cells [6]-[10] and [17]-[20]
+   - What was checked: Records with 0 steps, records with zero calories, duplicate records, records with negative values in checked columns, records with 1,440 sedentary minutes (those with zero steps and those with positive steps)
+   - What was actually removed: 0 
 
 4. Creating new columns
-   - Code location: 
-   - New columns:
-   - How they were calculated:
+   - Code location: cells [25] and [29]
+   - New columns: ActiveMinutes - Int64 - Total active minutes recorded per day | DayType - String - Classifies dates as weekdays or weekends
+   - How they were calculated: Actives minutes was calculated by adding LightlyActiveMinutes, FairlyActiveMinutes, and VeryActiveMinutes
+				Weekday number was calculated through weekday_number = pl.col("ActivityDate").dt.weekday()
 
 5. Grouping the data
-   - Code location: 
-   - Grouping columns: 
-   - Final number of groups: 
+   - Code location: cell [30]
+   - Grouping columns: group Id with DayType by participant_steps = fitbit_data.group_by("Id", "DayType").agg(pl.col("TotalSteps").mean().alias("MeanSteps"))
+   - Final number of groups: 65 initial groups; final 32 paired participants
 
 ### NHANES
 
 1. Loading the data
-   - Code location: 
-   - File format: 
-   - Starting shape: 
+   - Code location: cell [31]
+   - File format: .xpt loaded using pandas and then converted into polars dataframe.
+   - Starting shape: 61,168 rows, 15 columns, 6,917 unique participants, and 0 rows removed in loading.
 
 2. Fixing column types
-   - Code location:
-   - Columns changed: 
-   - What changed: 
+   - Code location: cell [36]
+   - Columns changed: PAXDAYD, PAXDAYWD, PAXMSTD
+   - What changed: Converted all three columns from binary (bytes) to strings using UTF-8 decoding. PAXDAYD and PAXDAYWD are later cast to Int64 for analysis.
 
 3. Cleaning unusual values
-   - Code location: 
-   - Condition used: 
-   - Action taken: 
-   - Rows removed: 
+   - Code location: cell [37]-[43]
+   - Condition used: Numeric values greater than 0 but less than 1e-70, excluding SEQN.
+   - Action taken: Replaced these extremely small positive values with 0.0 in a new dataframe called nhanes_clean. A total of 60,267 rows contained at least one such value.
+   - Rows removed: 0
 
 4. Filtering monitoring days
-   - Code location: 
-   - Days included: 
-   - Rows before: 
-   - Rows after:
+   - Code location: Cell [46]
+   - Days included: Monitoring days 2 through 8, excluding the typically partial first and last monitoring days.
+   - Rows before: 61,168
+   - Rows after: 47,643
 
 5. Creating analysis columns
-   - Code location: 
-   - New columns: 
+   - Code location: Cells [46], [47], and [49]
+   - New columns: DayType, MeanValidMinutes, MeanWearMinutes, MovementPerValidMinute, MeanDailyMIMS, MeanMIMSPerValidMinute
    - Calculations: 
-
-## Row Accounting
+     - DayType: Classifies PAXDAYWD values 1 and 7 as Weekend and all other values as Weekday.
+     - MeanValidMinutes: Average PAXVMD grouped by PAXDAYD.
+     - MeanWearMinutes: Average PAXWWMD grouped by DayType.
+     - MovementPerValidMinute: PAXMTSD divided by PAXVMD when PAXVMD is greater than 0; otherwise null.
+     - MeanDailyMIMS: Average PAXMTSD grouped by DayType.
+     - MeanMIMSPerValidMinute: Average MovementPerValidMinute grouped by DayType.
+   - Rows removed: 0. Four movement ratios are null, leaving 47,639 non-null ratios.
 
 | Dataset or stage | Before | After | Removed |
 |---|---:|---:|---:|
