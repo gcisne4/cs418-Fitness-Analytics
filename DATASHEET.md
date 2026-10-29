@@ -397,12 +397,19 @@ No joins in .eda
 ## Analysis Tables
 These tables are made in memory with figures and summaries in notebooks(output)
 
+
 fitbit_data:	Fitbit records after transformations
+
 participant_steps:	Average steps grouped by participant and day type
+
 paired_steps:	Participants with both weekday and weekend averages
+
 nhanes_clean:	NHANES records after near-zero cleaning
+
 nhanes_day_summary: Average valid minutes by monitoring day
+
 nhanes_weekday_data:	NHANES records restricted to days 2–8
+
 nhanes_activity_data:	Records with the movement-per-valid-minute calculation
 
 ## Reproducibility Limits
