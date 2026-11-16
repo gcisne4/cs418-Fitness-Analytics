@@ -6,27 +6,27 @@ This summarizes eda.ipynb.
 
 The data has 940 rows and 15 columns, one row per person per day. ActivityDate loaded as text, so we converted it to a date. There are no nulls, but some missing data is hiding as zeros (see section 2).
 
-| Column | Mean | Median | Min | Max |
-|---|---|---|---|---|
-| TotalSteps | 7,638 | 7,412 | 0 | 36,019 |
-| VeryActiveMinutes | 21.2 | 4 | 0 | 210 |
-| FairlyActiveMinutes | 13.6 | 6 | 0 | 143 |
-| LightlyActiveMinutes | 192.8 | 199 | 0 | 518 |
-| SedentaryMinutes | 991 | 1,058 | 0 | 1,440 |
-| Calories | 2,304 | 2,135 | 0 | 4,900 |
+|Column|Mean|Median|Min|Max|
+|-|-|-|-|-|
+|TotalSteps|7,638|7,412|0|36,019|
+|VeryActiveMinutes|21.2|4|0|210|
+|FairlyActiveMinutes|13.6|6|0|143|
+|LightlyActiveMinutes|192.8|199|0|518|
+|SedentaryMinutes|991|1,058|0|1,440|
+|Calories|2,304|2,135|0|4,900|
 
 What stood out: steps and calories have a minimum of 0, which is odd for someone wearing a tracker. The max steps (36,019) is far above the 75th percentile (10,725). Also, describe() gave a wrong max date (5/9/2016) because the date was still text and got sorted alphabetically.
 
 **2. Anomalies**
 
-| Anomaly | Rows | What we did |
-|---|---|---|
-| Zero steps | 77 | Flagged, plan to drop the non-wear days |
-| Zero calories | 4 | Flagged, all inside the 72 below |
-| 1,440 sedentary minutes and zero steps (tracker probably not worn) | 72 | Flagged, plan to drop |
-| 1,440 sedentary minutes but steps above 0 (contradictory) | 7 | Flagged, still deciding |
-| Date stored as text | 940 | Fixed |
-| Duplicates, negatives, nulls | 0 | Nothing to do |
+|Anomaly|Rows|What we did|
+|-|-|-|
+|Zero steps|77|Flagged, plan to drop the non-wear days|
+|Zero calories|4|Flagged, all inside the 72 below|
+|1,440 sedentary minutes and zero steps (tracker probably not worn)|72|Flagged, plan to drop|
+|1,440 sedentary minutes but steps above 0 (contradictory)|7|Flagged, still deciding|
+|Date stored as text|940|Fixed|
+|Duplicates, negatives, nulls|0|Nothing to do|
 
 The 4 zero-calorie days also have zero steps and 1,440 sedentary minutes, so we think the tracker wasn't worn or didn't record. Most of the 72 non-wear days still show a calorie number (like 1,347), so sedentary minutes is a better way to spot them than calories. Of the 7 contradictory days, 5 belong to one participant. We haven't removed any rows yet, but we plan to drop the 72 non-wear days because they pull averages down.
 
@@ -78,7 +78,7 @@ We compared average valid monitoring minutes across the nine monitoring days. Da
 
 This confirms that monitoring duration varies considerably across days, particularly at the beginning and end of data collection.
 
-The result was expected based on the NHANES monitoring protocol.
+The result was expected based on the NHANES monitoring protocol. We also linked NHANES movement data to demographic variables from DEMO\_G to examine whether weekday/weekend movement differences varied by age group. Among participants with both weekday and weekend records, all age groups had higher movement per valid minute on weekdays than weekends. However, adults aged 65+ had the smallest weekday-minus-weekend difference (0.364 MIMS per valid minute, 95% confidence interval: 0.270 to 0.458), compared with 0.774 to 0.871 in the younger groups. Repeating the analysis after excluding days with fewer than 1,200 valid minutes produced a similar result (0.382 for ages 65+). This suggests that the smaller weekday/weekend gap among older adults is not explained solely by shorter recordings.
 
 What next? Focus subsequent analyses on days 2-8 to reduce the influence of partial monitoring days.
 
@@ -92,10 +92,9 @@ What next? Investigate whether the weekday-weekend difference remains consistent
 
 5. Revised Research Questions
 
-How does monitoring duration vary across the nine monitoring days, and how does this influence comparisons of daily movement?
+How does weekday versus weekend movement differ among NHANES participants?
 
-Do participants have different wake wear times on weekdays compared with weekends?
+How do weekday and weekend physical activity patterns vary across age groups?
 
-Is average movement per valid monitoring minute higher on weekdays than weekends, and does this pattern remain consistent across individuals?
+How can age-related weekday/weekend movement differences help identify populations that may benefit from targeted physical activity interventions?
 
-Can NHANES MIMS movement measurements and Fitbit step counts reveal similar weekday-weekend movement patterns, despite measuring activity differently?
