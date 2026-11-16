@@ -1,30 +1,22 @@
 ## Main Findings (Narrative Analysis)
-- NHANES monitoring days 1 and 9 averaged 501 and 944 valid minutes, respectively, compared with approximately 1,431 to 1,436 minutes on days 2 to 8.
-
 - Among 32 paired Fitbit participants, the mean weekend-minus-weekday difference was -43 steps per day (95% confidence interval: -1,075 to 988), with substantial differences between individuals.
 
 - Among 6,824 paired NHANES participants, weekday movement averaged 0.746 more MIMS per valid minute than weekend movement (95% confidence interval: 0.683 to 0.809), and the difference remained similar after excluding shorter recordings.
 
 - Among 6,824 paired NHANES participants, adults aged 65+ had the smallest weekday-minus-weekend movement difference (0.364 MIMS per valid minute, 95% confidence interval: 0.270 to 0.458), compared with larger gaps in younger age groups.
-### Finding 1: First and last NHANES days have shorter coverage
-
-The recording coverage varies across monitoring days. We compared average valid minutes using NHANES daily records. Day 1 averaged 501 minutes, with an approximate 95% confidence interval of 496 to 506 minutes. Day 9 averaged 944 minutes, with an interval of 939 to 949. Days 2 to 8 averaged about 1,431 to 1,436 minutes. Changing participants could affect these averages because some people have missing monitoring days. To check this, we repeated the comparison using the 6,608 participants with all nine records. Their day 1 average was about 502 minutes, day 9 was 944 minutes, and days 2 to 8 averaged about 1,438 minutes. The shorter first and last days remained when we compared the same participants. This suggests that changing participant composition does not fully explain the pattern. These results describe recording coverage, rather than how physically active participants were.
-
-![First and last NHANES days have shorter coverage](figures/finding_one_monitoring_coverage.png)
-
-### Finding 2: Fitbit step differences vary between people
+### Finding 1: Fitbit step differences vary between people
 
 To compare weekday and weekend steps, we first averaged each participant's records within each day type. We then calculated one weekend minus weekday difference per participant. Among 32 participants with both day types, average weekday steps were 7,650 and average weekend steps were 7,607. The mean difference was about -43 steps per day, with an approximate 95% confidence interval from -1,075 to 988. Individual differences varied widely, even though the overall average difference was small. Suspected nonwear and contradictory records could affect this comparison. Excluding the 72 suspected non wear days changed the mean difference to 33 steps. Also excluding the seven contradictory days changed it to 64 steps. Both checks still had confidence intervals that included zero. These results do not establish a clear average weekday/weekend difference, but they also do not prove that the two are equal. The findings describe this small volunteer sample and cannot establish population wide patterns.
 
 ![Fitbit step differences vary between people](figures/finding_two_fitbit_paired_steps.png)
 
-### Finding 3: NHANES movement per valid minute is higher on weekdays
+### Finding 2: NHANES movement per valid minute is higher on weekdays
 
 Using monitoring days 2 to 8, we compared 6,824 participants who had both weekday and weekend records. We calculated each person's average movement per valid minute for each day type, giving each participant equal weight in the comparison. The averages were 9.58 MIMS per valid minute on weekdays and 8.83 on weekends. The weekday minus weekend difference was 0.746, with an approximate 95% confidence interval of 0.683 to 0.809. Shorter recordings could affect this comparison, so we repeated it using days with at least 1,200 valid minutes. This left 6,787 paired participants and produced a difference of 0.746, with an interval of 0.684 to 0.807. The similar result suggests that shorter recordings do not fully explain the observed gap. However, valid minutes include sleep and nonwear periods, and this check does not adjust for differences in awake wear time. The results are unweighted, and the approximate t intervals assume independent participants without accounting for the NHANES survey design. They support a weekday/weekend association in this analyzed sample, rather than a causal explanation or a nationally representative estimate.
 
 ![NHANES movement per valid minute is higher on weekdays](figures/finding_three_nhanes_paired_movement.png)
 
-### Finding 4: Adults aged 65+ show the smallest weekday/weekend movement gap
+### Finding 3: Adults aged 65+ show the smallest weekday/weekend movement gap
 
 We compared weekday and weekend movement per valid monitoring minute across NHANES age groups using 6,824 participants with both day types. We first calculated each participant's average weekday and weekend movement, then computed one weekday-minus-weekend difference per person. The average difference was 0.871 MIMS per valid minute for participants under 18 (95% confidence interval: 0.741 to 1.001), 0.774 for ages 18–39 (0.642 to 0.906), 0.794 for ages 40–64 (0.683 to 0.905), and 0.364 for ages 65+ (0.270 to 0.458). This shows that all age groups moved more on weekdays than weekends, but the gap was notably smaller among older adults. As a check, we repeated the comparison after excluding days with fewer than 1,200 valid minutes. The results remained similar: the age 65+ group still had the smallest difference at 0.382 (0.290 to 0.475). We also compared adults ages 65+ with adults ages 18–64 using Welch’s t-test. The older group’s weekday/weekend gap was about 0.420 MIMS per valid minute smaller in the original sample (p < 0.001), and about 0.398 smaller after excluding shorter recordings (p < 0.001). One alternative explanation is that shorter or incomplete recordings could distort the age-group comparisons, but the similar filtered results suggest this does not fully explain the pattern. These results describe associations in this analyzed sample and do not identify the cause of the age differences.
 
@@ -35,6 +27,12 @@ We compared weekday and weekend movement per valid monitoring minute across NHAN
 - Fitbit steps versus active minutes scatterplots remain in the exploratory analysis. We left them out of this narrative to focus on recording coverage and weekday/weekend comparisons 
 
 - Separate active minute and sedentary minute distributions remain in the exploratory analysis as background descriptions. We left them out because they do not directly answer the weekday/weekend questions discussed here
+
+### Data Quality: NHANES Monitoring Coverage
+
+The recording coverage varies across monitoring days. We compared average valid minutes using NHANES daily records. Day 1 averaged 501 minutes, with an approximate 95% confidence interval of 496 to 506 minutes. Day 9 averaged 944 minutes, with an interval of 939 to 949. Days 2 to 8 averaged about 1,431 to 1,436 minutes. Changing participants could affect these averages because some people have missing monitoring days. To check this, we repeated the comparison using the 6,608 participants with all nine records. Their day 1 average was about 502 minutes, day 9 was 944 minutes, and days 2 to 8 averaged about 1,438 minutes. The shorter first and last days remained when we compared the same participants. This suggests that changing participant composition does not fully explain the pattern. These results describe recording coverage, rather than how physically active participants were.
+
+![First and last NHANES days have shorter coverage](figures/finding_one_monitoring_coverage.png)
 
 
 # cs418-Fitness-Analytics
@@ -59,7 +57,17 @@ Is movement per valid monitoring minute higher on weekdays than weekends in NHAN
 How do weekday and weekend physical activity patterns vary across demographic groups, and how can these differences help identify populations that may benefit from targeted physical activity interventions?
 
 
+### Reproducing the Analysis
 
+To reproduce our analysis:
+
+1. Download the NHANES PAXDAY_G.XPT and DEMO_G.XPT datasets from the CDC.
+2. Place both files in the `data/cdc/` directory.
+3. Download the Fitbit dailyActivity_merged.csv dataset and place it in `data/fitbit/`.
+4. Open `eda.ipynb` in Jupyter Notebook.
+5. Select Kernel > Restart & Run All.
+
+The notebook generates the statistical results and figures used in the Main Findings section. Generated figures are saved in the `figures/` directory.
 
 Primary Datasets:
 Fitbit Fitness Tracker Data: https://www.kaggle.com/datasets/arashnic/fitbit
@@ -192,7 +200,7 @@ Details are in EDA.md and eda.ipynb.
 
 **Data:** Our primary dataset is the Fitbit daily activity data (940 rows, 15 columns, one row per participant per day). NHANES is our secondary dataset (61,168 rows, 15 columns, 6,917 participants, one row represents one participant's physical activity monitoring for one day. Each participant was recorded daily for 9 days).
 
-**Research questions:** How are daily steps and active minutes related, and why does it flatten at high step counts? Do people walk differently on weekdays and weekends, or does it depend more on the person? How does NHANES measure movement, and can we compare it to the Fitbit data?
+**Research questions:** Our current research questions are listed in the Research Questions section above. Earlier exploratory questions about steps and active minutes remain part of our background analysis.
 
 **Anomalies:** 72 days look like the tracker wasn't worn (zero steps and 1,440 sedentary minutes), including 4 with zero calories. We flagged them and plan to drop them. Another 7 days have 1,440 sedentary minutes but also steps, so we're still deciding. We also converted the date column from text to a date. We found no duplicates, negatives, or nulls.
 
