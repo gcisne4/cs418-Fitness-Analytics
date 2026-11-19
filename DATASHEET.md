@@ -73,7 +73,7 @@ Fitbit daily activity and NHANES PAXDAY_G are our primary datasets. DEMO_G is a 
 | **Purpose** | The file is cdc for Health Statistics. It provides demographic information, survey weights, and survey design fields. It could support future weighted or demographic analyses, NHANES analyses. |
 | **Composition** | The file is 9,756 rows and 48 cols. Each row represents one survey participant. Field eligibility varies by age and topic. Missing values, refused answers, and inapplicable questions must be interpreted using codebook. Different fields have different age and eligibilee rules. |
 | **Collection and Preprocessing** | interviewers collected demographic through household interviews. Some participants answered directly, while others had proxy respondents. CDC checked responses, skip patterns, and consistency. Some information left out restricted for confidentiality. The household interview took place in 2011 to 2012 using questionnaires on the computer. Proxy respondents answer for children under 16 and people unable to answer for themselves. Collection followed the NHANES consent book. |
-| **Current Use** | acquisition notebook reads file and checks structure. The current EDA does not join it to PAXDAY_G or use its demographic fields and survey weights. BRFSS was also inspected during acquisition, but it is not in the revised version. |
+| **Current Use** | Joined to PAXDAY_G on `SEQN` for the narrative analysis (see Section 4, Joins). We use age (`RIDAGEYR`), sex (`RIAGENDR`), race/ethnicity (`RIDRETH1`), income-to-poverty ratio (`INDFMPIR`), and the exam-sample weight (`WTMEC2YR`). BRFSS was inspected during acquisition but is not used. |
 | **Distribution and Maintenance** | CDC publishes the file in .xpt , release was first published in September 2013 and revised in January 2015. Under the public data conditions as seen in section 5 |
 
 **source for 1.3:** https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DEMO_G.htm
@@ -135,6 +135,27 @@ These are the revised questions from EDA.md. The older questions about sleep, de
 | **Frame** | The two separate collection settings. |
 | **Sample** | Fitbit's 32 complete ID pairs and NHANES day type summaries from days 2–8. |
 | **Limit** | These are different samples and comparison methods. <br> Differences cannot be attributed to the device alone No people are matched between the datasets. |
+
+| **Q8. Do people move less on weekends, or spend less time awake and wearing the monitor?** | |
+|:---|:---|
+| **Target** | US residents aged 6 and older in 2011 to 2012. |
+| **Frame** | NHANES examined participants who were eligible for and received the wrist monitor. |
+| **Sample** | 6,906 participants (47,639 monitoring days 2 to 8) with valid movement values. |
+| **Limit** | Monitor refusal, unreturned monitors and unusable data remove people. Non-wear and sleep are algorithm labels. Wrist MIMS captures arm movement, not total effort. Day-level weights are not applied in the main models (checked as a robustness analysis). |
+
+| **Q9. Does the weekend shift in awake-worn time differ by age?** | |
+|:---|:---|
+| **Target** | Same population, split by age group. |
+| **Frame** | Same as Q8, with age from DEMO_G. |
+| **Sample** | 1,988 under 18; 1,866 aged 18 to 39; 2,015 aged 40 to 64; 1,037 aged 65 and older. |
+| **Limit** | DEMO_G has no employment or school field, so age is only a rough stand-in for students and retirees. Age bands are our choice. |
+
+| **Q10. Does weekend movement per awake-worn minute differ by sex and household income?** | |
+|:---|:---|
+| **Target** | Same population, by sex and income. |
+| **Frame** | Same as Q8, with sex and income-to-poverty ratio from DEMO_G. |
+| **Sample** | 6,906 people for sex; 6,281 for income models (520 people have no income value and about 100 more have no day with 300 or more awake-worn minutes). |
+| **Limit** | Sex is the binary survey item. Income is a ratio capped at 5.0. People missing income are dropped, which may not be random. |
 
 **Sources for section 2:**
 
@@ -227,10 +248,23 @@ Polars weekday numbers are Monday = 1 through Sunday = 7.The Fitbit code uses 6 
 
 NHANES weekday codes are Sunday = 1 through Saturday = 7. average daily records
 
-### 3.5 Supporting Fields
+### 3.5 DEMO_G and analysis columns used in the narrative analysis
 
-DEMO_G and BRFSS are inspected in the acquisition notebook, but their fields are not used in the current EDA calculations.If we later use them, we must add their field definitions, missing valuecodes, and transformations to this codebook.
+All are produced by `analysis/prep.py` and `analysis/narrative_results.py`.
 
+| Column | Type | Units | Meaning | Values | Missing | Origin |
+|---|---|---|---|---|---|---|
+| RIAGENDR | Float64 | Code | Sex | 1 = male, 2 = female | 0 | DEMO_G |
+| RIDAGEYR | Float64 | Years | Age at screening | 6 to 80 among monitored people (80 = 80 and older) | 0 | DEMO_G |
+| RIDRETH1 | Float64 | Code | Race and Hispanic origin | 1 Mexican American, 2 Other Hispanic, 3 Non-Hispanic White, 4 Non-Hispanic Black, 5 Other | 0 | DEMO_G |
+| INDFMPIR | Float64 | Ratio | Family income divided by the poverty threshold | 0 to 5.0 (5.0 = 5 or more) | 840 nulls in file; 520 among analysed people | DEMO_G (README earlier misspelled it INDFPMIR) |
+| DMDEDUC2 | Float64 | Code | Education, adults 20 and older | 1 to 5; 7 and 9 treated as missing | Null for under 20 | DEMO_G (not used in the findings) |
+| WTMEC2YR | Float64 | Weight | Exam-sample weight | positive | 0 among matched | DEMO_G |
+| SDMVPSU, SDMVSTRA | Float64 | Code | Survey design fields | integer codes | 0 | DEMO_G (not used; intervals are clustered by person) |
+| mims_per_min | Float64 | MIMS/minute | PAXMTSD / PAXVMD when PAXVMD > 0 | 0 to 49.01 | 4 rows null, dropped | analysis/prep.py |
+| weekend | Int | 0/1 | 1 if PAXDAYWD is 1 (Sunday) or 7 (Saturday) | 0, 1 | 0 | analysis/prep.py |
+| age_group | Category | Years | Under 18, 18-39, 40-64, 65+ | 4 groups | 0 | analysis/prep.py, from RIDAGEYR |
+| m_awake | Float64 | MIMS/minute | PAXMTSD / PAXWWMD on days with PAXWWMD of at least 300 | observed 0 to 45.5 | 3,267 days not computed | analysis/narrative_results.py |
 
 ---
 
@@ -340,7 +374,11 @@ Obtaining files, reading em, inspecting, fixing, create vars, filtering data suc
 
 ### Joins
 
-No joins in .eda
+| Join | Key | Rows in | Matched | Unmatched |
+|---|---|---|---|---|
+| PAXDAY_G (61,168 rows, 6,917 people) with DEMO_G (9,756 people), left join on PAXDAY_G | `SEQN` | 6,917 people | 6,917 people | 0 PAXDAY_G people unmatched; 2,839 DEMO_G people have no monitor data and drop out |
+
+Code: `analysis/prep.py` (`load()`), which also keeps days 2 to 8 (47,643 rows), cleans near-zero values, drops 4 rows with undefined movement per valid minute (47,639 rows, 6,906 people), then builds `weekend`, `age_group` and `mims_per_min`.
 
 ### Analysis Tables
 
@@ -392,7 +430,7 @@ orignials file for data are not recorded as as long for the kaggle data but the 
 | **Source** | https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DEMO_G.htm |
 | **Data file** | https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/DEMO_G.XPT |
 | **Release** | NHANES 2011 to 2012 and  revised January 2015 |
-| **Download date** | Not recorded, release version above identifies the file needed. |
+| **Download date** | Re-downloaded and checked November 16, 2026 (9,756 rows, 48 columns, 9,756 unique SEQN). Earlier download date not recorded. |
 | **Format** | SAS sport .xpt |
 | **Terms** | Public domain, with NCHS conditions |
 | **Use** | Inspected during acquisition but not use in our EDA results. |

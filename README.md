@@ -1,34 +1,41 @@
 ## Main Findings (Narrative Analysis)
-- Among 32 paired Fitbit participants, the mean weekend-minus-weekday difference was -43 steps per day (95% confidence interval: -1,075 to 988), with substantial differences between individuals.
 
-- Among 6,824 paired NHANES participants, weekday movement averaged 0.746 more MIMS per valid minute than weekend movement (95% confidence interval: 0.683 to 0.809), and the difference remained similar after excluding shorter recordings.
+Our question is: how does movement differ on weekends and weekdays, and for whom? Finding 1 answers whether people move more or less on weekends than on weekdays. Finding 2 answers whether that weekend change in awake time differs by age. Finding 3 answers whether weekend movement differs by sex and household income. We cannot say why any of these differences exist, because the data has nothing on jobs, school or caregiving, and we may look into the reasons later with additional datasets.
 
-- Among 6,824 paired NHANES participants, adults aged 65+ had the smallest weekday-minus-weekend movement difference (0.364 MIMS per valid minute, 95% confidence interval: 0.270 to 0.458), compared with larger gaps in younger age groups.
-### Finding 1: Fitbit step differences vary between people
+- **Finding 1:** Movement is almost the same on weekends and weekdays. At first glance weekdays looked noticeably higher, but most of that gap came from weekends having less awake time, with more time asleep or with the monitor off, and the difference shrinks to almost nothing after accounting for awake time.
+- **Finding 2:** Adults 65 and older lose much less awake time on weekends than younger people do, so their weekends look more like their weekdays.
+- **Finding 3:** While awake, men move less on weekends than on weekdays but women do not, so women's weekend movement holds up better. People in higher-income households also tend to move relatively more on weekends than lower-income households do.
 
-To compare weekday and weekend steps, we first averaged each participant's records within each day type. We then calculated one weekend minus weekday difference per participant. Among 32 participants with both day types, average weekday steps were 7,650 and average weekend steps were 7,607. The mean difference was about -43 steps per day, with an approximate 95% confidence interval from -1,075 to 988. Individual differences varied widely, even though the overall average difference was small. Suspected nonwear and contradictory records could affect this comparison. Excluding the 72 suspected non wear days changed the mean difference to 33 steps. Also excluding the seven contradictory days changed it to 64 steps. Both checks still had confidence intervals that included zero. These results do not establish a clear average weekday/weekend difference, but they also do not prove that the two are equal. The findings describe this small volunteer sample and cannot establish population wide patterns.
+**How to read these.** Every number comes from NHANES 2011-2012 (PAXDAY_G joined to DEMO_G on **SEQN**; 6,906 people, 47,639 monitoring days, days 2 to 8 only). Each person is compared with their own weekdays (a person fixed-effects regression, so a person who is always very active does not distort the comparison), standard errors are clustered by person, and every model controls for monitoring day. "MIMS" is the monitor's movement unit. "Valid minute" is any minute the monitor recorded properly (includes sleep and time the monitor was off), and "awake-worn minute" is a minute classified as awake while wearing it. The code is **analysis/narrative_results.py** (run from the repo root); every number below is in **results/narrative_results.json**, and **narrative.ipynb** runs it top to bottom. These are associations in one survey cohort, not causes.
 
-![Fitbit step differences vary between people](figures/finding_two_fitbit_paired_steps.png)
+### Finding 1: Weekends differ in how much time we are awake and wearing the monitor, much more than in how fast we move
 
-### Finding 2: NHANES movement per valid minute is higher on weekdays
+The headline weekend/weekday comparison we started with (movement per valid minute) is 0.57 MIMS lower on weekends (CI: -0.63 to -0.50, about 5.9% of the weekday average of 9.58). Daily total movement is lower by 816 MIMS (CI: -911 to -722), also about 6%. But the weekend minutes are not spent the same way: people have about 42 fewer awake-worn minutes (CI: -46 to -38), about 20 more sleep minutes (CI: +16 to +23) and about 22 more non-wear minutes (CI: +17 to +27). Because sleep and non-wear minutes record almost no movement, they pull the per-valid-minute average down. When we control for sleep and non-wear minutes, the weekend gap shrinks from 0.57 to 0.11 (CI: -0.16 to -0.07), and when we divide daily movement by awake-worn minutes instead, the gap is 0.13 MIMS (CI: -0.21 to -0.06), under 1% of the weekday rate of 16.1. The rate result holds when we keep only days with at least 1,200 valid minutes (-0.13), only days with at least 600 awake-worn minutes (-0.13), drop Fridays (-0.09), or control for sleep minutes (-0.09); with survey weights it is +0.01 (CI: -0.08 to 0.11), which is no difference at all. One alternative explanation we ruled out is that activity simply declines across the monitoring week and weekends fall late in it: movement does fall steadily (day 8 is 1.35 MIMS per valid minute lower than day 2, CI: -1.46 to -1.25), and controlling for monitoring day lowers the headline gap from 0.75 to 0.57 before any of the other checks. The caveat is that we can only see the monitor, not why a minute is "non-wear" (a weekend swim and a forgotten monitor look the same), and the awake-minute rate still includes a little movement during sleep.
 
-Using monitoring days 2 to 8, we compared 6,824 participants who had both weekday and weekend records. We calculated each person's average movement per valid minute for each day type, giving each participant equal weight in the comparison. The averages were 9.58 MIMS per valid minute on weekdays and 8.83 on weekends. The weekday minus weekend difference was 0.746, with an approximate 95% confidence interval of 0.683 to 0.809. Shorter recordings could affect this comparison, so we repeated it using days with at least 1,200 valid minutes. This left 6,787 paired participants and produced a difference of 0.746, with an interval of 0.684 to 0.807. The similar result suggests that shorter recordings do not fully explain the observed gap. However, valid minutes include sleep and nonwear periods, and this check does not adjust for differences in awake wear time. The results are unweighted, and the approximate t intervals assume independent participants without accounting for the NHANES survey design. They support a weekday/weekend association in this analyzed sample, rather than a causal explanation or a nationally representative estimate.
+![People are awake-and-wearing the monitor about 40 fewer minutes on weekends, but move at nearly the same rate](figures/finding-one.png)
 
-![NHANES movement per valid minute is higher on weekdays](figures/finding_three_nhanes_paired_movement.png)
+### Finding 2: Older adults' weekends look more like their weekdays
 
-### Finding 3: Adults aged 65+ show the smallest weekday/weekend movement gap
+Finding 1 showed that weekends mostly change how much time we spend awake and wearing the monitor, so we asked who loses the most. The 42-minute weekend loss is not the same at every age. For people under 18 it is 40 minutes (CI: -47 to -32), for ages 18 to 39 it is 48 (CI: -57 to -39), for ages 40 to 64 it is 47 (CI: -55 to -39), and for adults 65 and older it is only 25 (CI: -34 to -17). Adults 65 and older therefore lose about 20 fewer minutes than everyone else (CI: 10 to 30; 6,906 people split as 1,988 under 18, 1,866 aged 18 to 39, 2,015 aged 40 to 64 and 1,037 aged 65 and older). This is also what explains an earlier result we had, that the weekend drop in movement per valid minute was smaller for 65+ (0.36 versus about 0.6 MIMS for younger groups): that gap is mostly a time-use difference, not a difference in effort. The pattern holds with survey weights (65+ lose 29 minutes, others 48 to 53; difference 21 minutes, CI: 9 to 34) and with days of at least 1,200 valid minutes (difference 18 minutes, CI: 8 to 28). An alternative explanation is that the monitor's wake, sleep and non-wear classification works differently for older adults, which would change these minutes without any change in behavior; we cannot test that with these data, and DEMO_G has no employment field, so we cannot say whether work or school schedules are the reason (ages under 18 and 65 and older are only rough stand-ins for students and retirees). Older adults also move slightly less per awake-worn minute on weekends (-0.25 MIMS, CI: -0.35 to -0.15), so their weekends are not identical to their weekdays.
 
-We compared weekday and weekend movement per valid monitoring minute across NHANES age groups using 6,824 participants with both day types. We first calculated each participant's average weekday and weekend movement, then computed one weekday-minus-weekend difference per person. The average difference was 0.871 MIMS per valid minute for participants under 18 (95% confidence interval: 0.741 to 1.001), 0.774 for ages 18–39 (0.642 to 0.906), 0.794 for ages 40–64 (0.683 to 0.905), and 0.364 for ages 65+ (0.270 to 0.458). This shows that all age groups moved more on weekdays than weekends, but the gap was notably smaller among older adults. As a check, we repeated the comparison after excluding days with fewer than 1,200 valid minutes. The results remained similar: the age 65+ group still had the smallest difference at 0.382 (0.290 to 0.475). We also compared adults ages 65+ with adults ages 18–64 using Welch’s t-test. The older group’s weekday/weekend gap was about 0.420 MIMS per valid minute smaller in the original sample (p < 0.001), and about 0.398 smaller after excluding shorter recordings (p < 0.001). One alternative explanation is that shorter or incomplete recordings could distort the age-group comparisons, but the similar filtered results suggest this does not fully explain the pattern. These results describe associations in this analyzed sample and do not identify the cause of the age differences.
+![Adults 65+ lose about 25 awake minutes on weekends; everyone else loses 40 to 48](figures/finding-two.png)
 
-![Adults aged 65+ show the smallest weekday/weekend movement gap](figures/finding_four_nhanes_age_groups.png)
+### Finding 3: Men slow down on weekends and women do not, and higher-income people slow down less
 
-### Analyses left out of the main story
+Finding 2 looked at who differs in time. This finding looks at the other part, how hard people move while they are awake, measured as MIMS per awake-worn minute. Men move 0.40 MIMS less on weekends than on weekdays (CI: -0.52 to -0.29), while women move 0.13 more (CI: +0.04 to +0.23). After accounting for age group and income, women's weekend change is 0.59 higher than men's (CI: 0.44 to 0.74), and the difference points the same way in every age group (under 18: 0.58, CI 0.25 to 0.92; 18 to 39: 0.55; 40 to 64: 0.69; 65 and older: 0.30, CI 0.11 to 0.50). It does not come from sleeping in. Women and men lose a similar number of awake-worn minutes (a difference of +2 minutes, CI: -6 to +11), so the sex difference is in how they move while awake, not in how long they are awake. It also holds with survey weights (0.60), with days of at least 1,200 valid minutes (0.56), with days of at least 600 awake-worn minutes (0.61) and when we control for sleep minutes (0.57). Income also shows a pattern: each extra point of the income-to-poverty ratio goes with 0.14 more weekend movement per awake-worn minute (CI: 0.09 to 0.19; 6,281 people: 520 people have no income value and about 100 more have no day with 300 or more awake-worn minutes). It holds with weights (0.23), after adjusting for race and ethnicity (0.13) and among adults only (0.23), but only the upper income third differs (+0.17, CI: 0.04 to 0.30, while the lower and middle thirds are -0.21 and -0.31), so it is not a smooth trend, and income stands in for many things such as job type and free time. We left out education and BMI: education exists only for adults 20 and older, and BMI needs another NHANES file that we did not use. These are associations. They show who differs, not why.
 
-- Fitbit steps versus active minutes scatterplots remain in the exploratory analysis. We left them out of this narrative to focus on recording coverage and weekday/weekend comparisons 
+![Women and higher-income people move relatively more on weekends, per awake minute](figures/finding-three.png)
 
-- Separate active minute and sedentary minute distributions remain in the exploratory analysis as background descriptions. We left them out because they do not directly answer the weekday/weekend questions discussed here
+### Analyses left out of the main story, and why
 
-### Data Quality: NHANES Monitoring Coverage
+- **Fitbit weekday/weekend steps (32 volunteers):** the mean weekend-minus-weekday difference was -43 steps per day (CI: -1,075 to 988), which neither shows nor rules out a difference. Fitbit has no age, sex or income fields, so it cannot support any of the three findings above; the code remains in **eda.ipynb**.
+- **Earlier NHANES finding (weekday movement 0.746 MIMS per valid minute higher):** this reproduced as 0.75 (0.57 after the monitoring-day control) but turned out to be mostly a time-use effect (Finding 1), so we replaced it.
+- **Earlier age-group finding (weekday/weekend gap smallest for 65+, unweighted t-intervals):** reproduced as a smaller drop of 0.36 per valid minute, which Finding 2 re-expresses as a smaller loss of awake time.
+- **Steps versus active minutes, sedentary and active minute distributions (Fitbit):** background descriptions in **eda.ipynb** that do not bear on the weekday/weekend questions.
+- **Mixed-effects model with a random intercept per person (suggested by our instructor):** the person fixed-effects model above answers the same within-person question; **narrative.ipynb** has the mixed-model version as a cross-check cell.
+- **BRFSS (self-reported exercise) and education/BMI:** not used, as they would need new data or cannot be linked to individuals.
+
+### Data quality note: NHANES monitoring coverage (methods, not a finding)
 
 The recording coverage varies across monitoring days. We compared average valid minutes using NHANES daily records. Day 1 averaged 501 minutes, with an approximate 95% confidence interval of 496 to 506 minutes. Day 9 averaged 944 minutes, with an interval of 939 to 949. Days 2 to 8 averaged about 1,431 to 1,436 minutes. Changing participants could affect these averages because some people have missing monitoring days. To check this, we repeated the comparison using the 6,608 participants with all nine records. Their day 1 average was about 502 minutes, day 9 was 944 minutes, and days 2 to 8 averaged about 1,438 minutes. The shorter first and last days remained when we compared the same participants. This suggests that changing participant composition does not fully explain the pattern. These results describe recording coverage, rather than how physically active participants were.
 
@@ -47,15 +54,11 @@ GROUP MEMBERS: Hashim, Shriya, Yumna, G, Guillermo
 
 ## Research Questions
 
-**Question 1:**
-Do Fitbit participants walk differently on weekdays and weekends, or does physical activity depend more on the individual?
+**Question 1:** Do people move less on weekends, or do they mainly spend less time awake and wearing the monitor?
 
-**Question 2:**
-Is movement per valid monitoring minute higher on weekdays than weekends in NHANES participants?
+**Question 2:** Does the weekend shift in awake-worn time differ by age?
 
-**Question 3:**
-How do weekday and weekend physical activity patterns vary across demographic groups, and how can these differences help identify populations that may benefit from targeted physical activity interventions?
-
+**Question 3:** Does weekend movement (per awake-worn minute) differ by sex and household income?
 
 ### Reproducing the Analysis
 
@@ -64,10 +67,8 @@ To reproduce our analysis:
 1. Download the NHANES PAXDAY_G.XPT and DEMO_G.XPT datasets from the CDC.
 2. Place both files in the `data/cdc/` directory.
 3. Download the Fitbit dailyActivity_merged.csv dataset and place it in `data/fitbit/`.
-4. Open `eda.ipynb` in Jupyter Notebook.
-5. Select Kernel > Restart & Run All.
-
-The notebook generates the statistical results and figures used in the Main Findings section. Generated figures are saved in the `figures/` directory.
+4. From the repo root run `python analysis/narrative_results.py` (needs numpy, pandas, matplotlib), or open `narrative.ipynb` and Restart & Run All. This produces `results/narrative_results.json` and `figures/finding-one.png`, `finding-two.png` and `finding-three.png`, which are the numbers and figures in Main Findings.
+5. `eda.ipynb` holds the earlier exploratory work (Fitbit and NHANES profiling).
 
 Primary Datasets:
 Fitbit Fitness Tracker Data: https://www.kaggle.com/datasets/arashnic/fitbit
@@ -154,7 +155,7 @@ RIDAGEYR - Float64
 
 RIDRETH1 - Float64
 
-INDFPMIR - Float64
+INDFMPIR - Float64
 
 DMDEDUC2 - Float64
 

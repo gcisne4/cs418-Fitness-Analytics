@@ -92,9 +92,12 @@ What next? Investigate whether the weekday-weekend difference remains consistent
 
 5. Revised Research Questions
 
-How does weekday versus weekend movement differ among NHANES participants?
+Our questions were revised again for the narrative analysis (see README.md, Main Findings), after the DEMO_G join and a check that showed most of the weekend drop in movement per valid minute comes from weekends having less awake-worn time (more sleep and non-wear):
 
-How do weekday and weekend physical activity patterns vary across age groups?
+Do people move less on weekends, or do they mainly spend less time awake and wearing the monitor?
 
-How can age-related weekday/weekend movement differences help identify populations that may benefit from targeted physical activity interventions?
+Does the weekend shift in awake-worn time differ by age?
 
+Does weekend movement (per awake-worn minute) differ by sex and household income?
+
+Code for these is in `analysis/` and `narrative.ipynb`; the earlier Fitbit questions remain in `eda.ipynb` as background.
