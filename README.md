@@ -32,7 +32,7 @@ Finding 2 looked at who differs in time. This finding looks at the other part, h
 - **Earlier NHANES finding (weekday movement 0.746 MIMS per valid minute higher):** this reproduced as 0.75 (0.57 after the monitoring-day control) but turned out to be mostly a time-use effect (Finding 1), so we replaced it.
 - **Earlier age-group finding (weekday/weekend gap smallest for 65+, unweighted t-intervals):** reproduced as a smaller drop of 0.36 per valid minute, which Finding 2 re-expresses as a smaller loss of awake time.
 - **Steps versus active minutes, sedentary and active minute distributions (Fitbit):** background descriptions in **eda.ipynb** that do not bear on the weekday/weekend questions.
-- **Mixed-effects model with a random intercept per person (suggested by our instructor):** the person fixed-effects model above answers the same within-person question; **narrative.ipynb** has the mixed-model version as a cross-check cell.
+- **Mixed-effects model with a random intercept per person:** the person fixed-effects model used above answers the same within-person question, so the mixed-model version in **narrative.ipynb** is included only as a cross-check.
 - **BRFSS (self-reported exercise) and education/BMI:** not used, as they would need new data or cannot be linked to individuals.
 
 ### Data quality note: NHANES monitoring coverage (methods, not a finding)

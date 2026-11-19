@@ -257,7 +257,7 @@ All are produced by `analysis/prep.py` and `analysis/narrative_results.py`.
 | RIAGENDR | Float64 | Code | Sex | 1 = male, 2 = female | 0 | DEMO_G |
 | RIDAGEYR | Float64 | Years | Age at screening | 6 to 80 among monitored people (80 = 80 and older) | 0 | DEMO_G |
 | RIDRETH1 | Float64 | Code | Race and Hispanic origin | 1 Mexican American, 2 Other Hispanic, 3 Non-Hispanic White, 4 Non-Hispanic Black, 5 Other | 0 | DEMO_G |
-| INDFMPIR | Float64 | Ratio | Family income divided by the poverty threshold | 0 to 5.0 (5.0 = 5 or more) | 840 nulls in file; 520 among analysed people | DEMO_G (README earlier misspelled it INDFPMIR) |
+| INDFMPIR | Float64 | Ratio | Family income divided by the poverty threshold | 0 to 5.0 (5.0 = 5 or more) | 840 nulls in file; 520 among analysed people | DEMO_G |
 | DMDEDUC2 | Float64 | Code | Education, adults 20 and older | 1 to 5; 7 and 9 treated as missing | Null for under 20 | DEMO_G (not used in the findings) |
 | WTMEC2YR | Float64 | Weight | Exam-sample weight | positive | 0 among matched | DEMO_G |
 | SDMVPSU, SDMVSTRA | Float64 | Code | Survey design fields | integer codes | 0 | DEMO_G (not used; intervals are clustered by person) |
